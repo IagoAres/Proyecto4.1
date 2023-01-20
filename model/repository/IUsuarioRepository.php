@@ -13,5 +13,5 @@ interface IUsuarioRepository {
 
    public function getUsuarios(): array;
 
-    public function getUsuarioByEmail($email): Usuario;
+  
 }
