@@ -1,7 +1,7 @@
 <?php
 
 /* Default options */
-const DEFAULT_CONTROLLER = "Nota";
+const DEFAULT_CONTROLLER = "Usuario";
 const DEFAULT_ACTION = "list";
 
 const CONTROLLERS_FOLDER="controller";
