@@ -24,6 +24,12 @@ class UsuarioController {
         $this->page_title = 'Listado de usuarios';
         return $this->usuarioServicio->getUsuarios();
     }
+    
+    public function login() {
 
+        $this->view = self::VIEW_FOLDER . DIRECTORY_SEPARATOR . 'login';
+        $this->page_title = 'Login de usuarios';
+        return $this->usuarioServicio->getUsuarios();
+    }
 }
 ?>

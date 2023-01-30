@@ -1,15 +1,5 @@
 <?php
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
- */
-
-/**
- * Description of Usuario
- *
- * @author wadmin
- */
 class Usuario implements JsonSerializable {
     private int $id;
     private string $email;
@@ -57,7 +47,7 @@ class Usuario implements JsonSerializable {
     }
 
 
- public function jsonSerialize() {
+ public function jsonSerialize(): JsonSerializable {
         //Especificamos qué propiedades no públicas queremos que pasen a formar parte del objeto JSON
         return array(
             'id' => $this->id,
