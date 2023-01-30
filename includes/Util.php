@@ -32,8 +32,6 @@ class Util {
         //Toma las propiedades de la clase:     //https://www.php.net/manual/es/reflectionclass.getproperties.php
         $properties = $reflection->getProperties();
 
-       
-
         //$key es clave numérica, $property es un objeto ReflectionProperty https://www.php.net/manual/es/class.reflectionproperty.php#reflectionproperty.constants.modifiers
 
         $claves_obj = array_keys($obj_como_array_asoc);
@@ -62,5 +60,4 @@ class Util {
         }
         return $instance;
     }
-
 }

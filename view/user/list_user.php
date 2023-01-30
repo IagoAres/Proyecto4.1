@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12 text-right">
-      
+
     </div>
     <?php if (count($dataToView["data"]) > 0) : ?>
 
@@ -17,19 +17,20 @@
                 <?php foreach ($dataToView["data"] as $user) { ?>
                     <tr>
                         <td><?= $user->getEmail() ?></td>
-                        <td><?=$user->getRoleNamesCSV();
-                      
-                      ?></td>
+                        <td><?= $user->getRoleNamesCSV();
+                    ?></td>
                     </tr>
                     <?php
                 }
                 ?>
             </tbody>
         </table>
-    <?php endif;
-    
-    if(count($dataToView["data"])===0):?>
-        
+    <?php
+    endif;
+
+    if (count($dataToView["data"]) === 0):
+        ?>
+
         <div class="alert alert-info">
             Actualmente no existen usuarios.
         </div>

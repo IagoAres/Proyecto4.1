@@ -1,6 +1,5 @@
 <?php
 ob_start();
-require_once '../includes/util.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,11 +10,11 @@ require_once '../includes/util.php';
 
     </head>
     <body>
-       <?php
-        /*if (isUserLoggedIn()) {
-            redirectToNextPage();
-            exit;
-        }*/
+        <?php
+        /* if (isUserLoggedIn()) {
+          redirectToNextPage();
+          exit;
+          } */
         ?>
 
         <div class="container-fluid">
@@ -51,8 +50,6 @@ require_once '../includes/util.php';
 
                         <!-- Submit button -->
                         <input type="submit" class="btn btn-primary btn-block mb-4" value="Iniciar sesión"></button>
-
-
                     </form>
 
                     <?php
@@ -60,24 +57,27 @@ require_once '../includes/util.php';
                     function redirectToNextPage() {
                         global $app_roles;
                         $roleId = $_SESSION["roleId"];
-                        if ($app_roles[$roleId] == ADMIN_ROLE) {
-                            header('Location: admin.php');
-                        } elseif ($app_roles[$roleId] == USER_ROLE) {
+                        if (APP_ROLES[$roleId] == ADMIN_ROLE) {
+                            header('Location: ../admin.php');
+                        } elseif (APP_ROLES[$roleId] == USER_ROLE) {
                             header('Location: welcome.php');
                         }
                     }
 
-                    $pass_user1 = "abc123.";
-                    $password_hash = password_hash($pass_user1, PASSWORD_DEFAULT);
-                    echo $password_hash;
-
                     $usuarios = array("user1@edu.es" =>
-                        array("pwd" => $password_hash, "pwd-1" => "aBc123.", "pwd-2" => "abC123.", "roles" => [ADMIN_ROLE, USER_ROLE]),
-                        "user2@edu.es" => array("pwd" => $password_hash, "pwd-1" => "123aBc.", "pwd-2" => "123abC.", "roles" => [USER_ROLE]));
+                        array("pwd" => SessionManager::encryptPwds("abc123."),
+                            "pwd-1" => SessionManager::encryptPwds("aBc123."),
+                            "pwd-2" => SessionManager::encryptPwds("abC123."),
+                            "roles" => [ADMIN_ROLE, USER_ROLE]),
+                        "user2@edu.es" =>
+                        array("pwd" => SessionManager::encryptPwds("abc123."),
+                            "pwd-1" => SessionManager::encryptPwds("123aBc."),
+                            "pwd-2" => SessionManager::encryptPwds("123abC."),
+                            "roles" => [USER_ROLE]));
 
                     const USER_DOES_NOT_EXIST = "No existe usuario";
                     const PWD_INCORRECT = "La contraseña no es correcta";
-                    const ROLE_PROBLEM = "No es posible iniciar sesión";
+                    const ROLE_PROBLEM = "No es posible iniciar sesión, no posees permisos de rol.";
 
                     $exito = false;
 
@@ -89,24 +89,24 @@ require_once '../includes/util.php';
                         $pwd = $_POST["pwd"];
                         $rolId = (int) $_POST["rol"];
 
-                        if (!existeUser($user, $usuarios)) {
-                            array_push($errors, PWD_INCORRECT . " o " . USER_DOES_NOT_EXIST);
-                        } elseif (!login($user, $pwd, $usuarios)) {
-                            array_push($errors, PWD_INCORRECT . " o " . USER_DOES_NOT_EXIST);
-                        } elseif (!isUserInRoleId($user, $rolId, $usuarios)) {
+                        if (!SessionManager::UserExists($user, $usuarios)) {
+                            array_push($errors, USER_DOES_NOT_EXIST);
+                        } elseif (!SessionManager::CheckPwd($usuarios[$user], $pwd)) {
+                            array_push($errors, PWD_INCORRECT);
+                        } elseif (!SessionManager::isUserInRole($usuarios[$user], $rolId)) {
                             array_push($errors, ROLE_PROBLEM);
                         } else {
-                            iniciarSesion();
+                            SessionManager::iniciarSesion();
                             $_SESSION["user"] = $user;
-                            $_SESSION["ultimoAcceso"] = time();
+                            $_SESSION["pwd"] = SessionManager::encryptPwds($_POST["pwd"]);
                             $_SESSION["roleId"] = $rolId;
-
+                            $_SESSION["time"] = time();
+                            var_dump($_SESSION);
                             redirectToNextPage();
                             exit;
                         }
                     }
                     ?>
-
 
                     <?php if (count($errors) > 0) { ?>
                         <div class="alert alert-danger" role="alert">
